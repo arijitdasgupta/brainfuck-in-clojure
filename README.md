@@ -42,7 +42,7 @@ While in project directory
 or
 
 ```
-bash sample_run.sh
+bash bf_run.sh
 ```
 
 This first line of `sample_code_n_input.txt` is code. From second lines these are 
