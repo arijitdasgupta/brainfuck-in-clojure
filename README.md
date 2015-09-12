@@ -30,7 +30,3 @@ lein test
 ## What's next?
 
 Syntax pre-run checking in Brainfuck. More idiomatic clojure code.
-
-
-## License
-Distributed under the Eclipse Public License either version 1.0 any later version.
