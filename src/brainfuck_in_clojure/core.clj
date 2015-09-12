@@ -119,8 +119,10 @@
     (if (>= (:head state) (count (:code state)))
       nil
       (let [funk (get funk-map (check-instruction state))
-            next-head (inc (:head state))]
-        (recur (assoc (funk state io) :head next-head))))))
+            next-head (inc (:head state))
+            new-state (funk state io)
+            new-head (if (= (:head new-state) (:head state)) next-head (:head new-state))] ;If the head doesn't change continue regularly or change head accordingly
+        (recur (assoc new-state :head new-head))))))
 
 (defn start-brainfuck
   [code]
