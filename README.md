@@ -27,6 +27,26 @@ Tests are in `test` directory. To run tests,
 lein test
 ```
 
+###Sample code and input
+
+Try executing bf_run.sh
+
+_On most systems this would be_
+
+While in project directory
+
+```
+./bf_run.sh
+```
+
+or
+
+```
+bash sample_run.sh
+```
+
+This first line of `sample_code_n_input.txt` is code. From second lines these are 
+
 ## What's next?
 
 Syntax pre-run checking in Brainfuck. More idiomatic clojure code.
