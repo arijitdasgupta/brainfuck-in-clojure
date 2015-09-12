@@ -67,29 +67,6 @@
         (:pointer (decrement-pointer state io)
         0))))))
 
-(deftest bdepth-test
-  (testing "BDepth routines"
-    (is
-      (=
-        (let [state {}]
-          (push-bdepth state))
-        1))
-    (is
-      (=
-        (let [state {:bdepth 1}]
-          (push-bdepth state))
-        2))
-    (is
-      (=
-        (let [state {}]
-          (pop-bdepth state))
-        0))
-    (is
-      (=
-        (let [state {:bdepth 2}]
-          (pop-bdepth state))
-        1))))
-
 (deftest goto-square-test
   (testing "Goto closing  ] bracket"
     (is
@@ -147,4 +124,24 @@
           :ram [5 0 0 0 0]
           }]
           (:ram (tape-machine state io)))
-          [0 0 5 0 0 ]))))
+          [0 0 5 0 0 ]))
+    (is
+      (=
+        (let [state {
+          :pointer 0
+          :head 0
+          :code (split-tape "[>+++[>+<-]<-]")
+          :ram [5 0 0 0 0]
+          }]
+          (:ram (tape-machine state io)))
+          [0 0 15 0 0 ]))
+    (is
+      (=
+        (let [state {
+          :pointer 0
+          :head 0
+          :code (split-tape "[>+[>+<-]<-]")
+          :ram [5 5 0 0 0]
+          }]
+          (:ram (tape-machine state io)))
+          [0 0 10 0 0 ]))))

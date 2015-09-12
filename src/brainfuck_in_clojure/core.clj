@@ -66,38 +66,34 @@
   (let [current-pointer (:pointer state)]
     (assoc state :pointer (dec current-pointer))))
 
-(defn push-bdepth
-  [state]
-  (let [bdepth (:bdepth state)]
-    (if (= bdepth nil)
-      1
-      (inc bdepth))))
-
-(defn pop-bdepth
-  [state]
-  (let [bdepth (:bdepth state)]
-    (if (= bdepth nil)
-      0
-      (dec bdepth))))
-
 (defn goto-square
   [state io]
   (let [code (:code state) current-value (get (:ram state) (:pointer state))]
     (if (<= current-value 0)
-      (loop [head (:head state)]
-        (if (or (= (get code head) \]) (= head (count code)))
-          (assoc state :head head)
-          (recur (inc head))))
+      (loop [head (:head state) bdepth 0]
+        (cond
+          (= (get code head) \[) (recur (inc head) (inc bdepth))
+          (and (= (get code head) \]) (> bdepth 1)) (recur (inc head) (dec bdepth)) ;Crazy nested loop logic
+          (and (= (get code head) \]) (= bdepth 1)) (assoc state :head head)
+          :else (recur (inc head) bdepth)))
     state)))
 
+    ; (if (or (= (get code head) \]) (= head (count code)))
+    ;   (assoc state :head head)
+    ;   (recur (inc head))))
 
 (defn goto-back-square
   [state io]
   (let [code (:code state)]
-    (loop [head (:head state)]
-      (if (= (get code head) \[)
-        (assoc state :head head)
-        (recur (dec head))))))
+    (loop [head (:head state) bdepth 0]
+      (cond
+        (= (get code head) \]) (recur (dec head) (inc bdepth))
+        (and (= (get code head) \[) (> bdepth 1)) (recur (dec head) (dec bdepth)) ;Crazy nested loop logic
+        (and (= (get code head) \[) (= bdepth 1)) (assoc state :head head)
+        :else (recur (dec head) bdepth)))))
+      ; (if (= (get code head) \[)
+      ;   (assoc state :head head)
+      ;   (recur (dec head))))))
 
 (defn output
   [state io]

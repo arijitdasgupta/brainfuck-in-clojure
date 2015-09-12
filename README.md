@@ -51,5 +51,7 @@ This first line of `sample_code_n_input.txt` is code. From second lines these ar
 
 Syntax pre-run checking in Brainfuck. More idiomatic clojure code.
 
-##KNOWN ISSUES
+##DIFFERENCE FROM ORIGINAL BF
  - For `[` current pointer value is checked against <=0
+ - Multi-level loops eg. `[...[...]...]` are supported
+ - Has an `M` instruction for printing whole machine state
