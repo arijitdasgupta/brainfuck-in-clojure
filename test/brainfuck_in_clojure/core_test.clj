@@ -90,18 +90,18 @@
           (:head (goto-square state io))
           0)))))
 
-(deftest goto-next-test
-  (testing "Goto next statement"
+(deftest goto-back-square-test
+  (testing "Goto back ] statement"
     (is
-      (let [state {
-        :pointer 0
-        :head 0
-        :code [\[ \- \- \]]
-        :ram [1 0 0 0]
-        }]
-        (=
-          (:head (goto-next state io)
-          0))))))
+      (=
+        (let [state {
+          :pointer 0
+          :head 3
+          :code [\[ \- \- \]]
+          :ram [1 0 0 0]
+          }]
+          (:head (goto-back-square state io)))
+          0))))
 
 (deftest tape-machine-test
   (testing "Tape machine"
@@ -110,8 +110,8 @@
         (let [state {
           :pointer 0
           :head 0
-          :code [\+ \M \+ \M \- \M \> \M]
+          :code [\+ \+ \+ \[ \- \M \]]
           :ram [0 0 0 0 0]
           }]
           (:ram (tape-machine state io))
-          [1 0 0 0 0])))))
+          [0 0 0 0 0])))))

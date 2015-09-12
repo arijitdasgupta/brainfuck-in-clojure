@@ -69,16 +69,20 @@
 (defn goto-square
   [state io]
   (let [code (:code state) current-value (get (:ram state) (:pointer state))]
-    (if (= current-value 0)
+    (if (<= current-value 0)
       (loop [head (:head state)]
         (if (or (= (get code head) \]) (= head (count code)))
           (assoc state :head head)
           (recur (inc head))))
       state)))
 
-(defn goto-next
+(defn goto-back-square
   [state io]
-  state)
+  (let [code (:code state)]
+    (loop [head (:head state)]
+      (if (= (get code head) \[)
+        (assoc state :head head)
+        (recur (dec head))))))
 
 (defn output
   [state io]
@@ -108,7 +112,7 @@
   \> increment-pointer
   \< decrement-pointer
   \[ goto-square
-  \] goto-next
+  \] goto-back-square
   \. output
   \, input
   \M print-state})
@@ -119,10 +123,11 @@
     (if (>= (:head state) (count (:code state)))
       nil
       (let [funk (get funk-map (check-instruction state))
-            next-head (inc (:head state))
             new-state (funk state io)
-            new-head (if (= (:head new-state) (:head state)) next-head (:head new-state))] ;If the head doesn't change continue regularly or change head accordingly
-        (recur (assoc new-state :head new-head))))))
+            new-head (:head new-state)]
+        (if (>= new-head (:head state))
+          (recur (assoc new-state :head (inc new-head)))
+          (recur new-state))))))
 
 (defn start-brainfuck
   [code]
