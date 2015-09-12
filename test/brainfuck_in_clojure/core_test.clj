@@ -67,8 +67,31 @@
         (:pointer (decrement-pointer state io)
         0))))))
 
+(deftest bdepth-test
+  (testing "BDepth routines"
+    (is
+      (=
+        (let [state {}]
+          (push-bdepth state))
+        1))
+    (is
+      (=
+        (let [state {:bdepth 1}]
+          (push-bdepth state))
+        2))
+    (is
+      (=
+        (let [state {}]
+          (pop-bdepth state))
+        0))
+    (is
+      (=
+        (let [state {:bdepth 2}]
+          (pop-bdepth state))
+        1))))
+
 (deftest goto-square-test
-  (testing "Goto closing bracket"
+  (testing "Goto closing  ] bracket"
     (is
       (let [state {
         :pointer 0
@@ -80,38 +103,48 @@
           (:head (goto-square state io))
           3)))
     (is
-      (let [state {
-        :pointer 0
-        :head 0
-        :code [\[ \- \- \]]
-        :ram [1 0 0 0]
-        }]
-        (=
-          (:head (goto-square state io))
-          0)))))
+      (=
+        (let [state {
+          :pointer 0
+          :head 0
+          :code [\[ \- \- \]]
+          :ram [1 0 0 0]
+          }]
+          (:head (goto-square state io)))
+          0))))
 
 (deftest goto-back-square-test
-  (testing "Goto back ] statement"
+  (testing "Goto back to [ statement"
     (is
       (=
         (let [state {
           :pointer 0
-          :head 3
-          :code [\[ \- \- \]]
+          :head 4
+          :code [\> \[ \- \- \]]
           :ram [1 0 0 0]
           }]
           (:head (goto-back-square state io)))
-          0))))
+          1))))
 
 (deftest tape-machine-test
-  (testing "Tape machine"
+  (testing "Tape machine test"
     (is
       (=
         (let [state {
           :pointer 0
           :head 0
-          :code [\+ \+ \+ \[ \- \M \]]
-          :ram [0 0 0 0 0]
+          :code (split-tape "[->+<]")
+          :ram [3 0 0 0 0]
           }]
-          (:ram (tape-machine state io))
-          [0 0 0 0 0])))))
+          (:ram (tape-machine state io)))
+          [0 3 0 0 0]))
+    (is
+      (=
+        (let [state {
+          :pointer 0
+          :head 0
+          :code (split-tape "[->>+<<]")
+          :ram [5 0 0 0 0]
+          }]
+          (:ram (tape-machine state io)))
+          [0 0 5 0 0 ]))))

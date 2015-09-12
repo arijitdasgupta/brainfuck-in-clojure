@@ -66,6 +66,20 @@
   (let [current-pointer (:pointer state)]
     (assoc state :pointer (dec current-pointer))))
 
+(defn push-bdepth
+  [state]
+  (let [bdepth (:bdepth state)]
+    (if (= bdepth nil)
+      1
+      (inc bdepth))))
+
+(defn pop-bdepth
+  [state]
+  (let [bdepth (:bdepth state)]
+    (if (= bdepth nil)
+      0
+      (dec bdepth))))
+
 (defn goto-square
   [state io]
   (let [code (:code state) current-value (get (:ram state) (:pointer state))]
@@ -74,7 +88,8 @@
         (if (or (= (get code head) \]) (= head (count code)))
           (assoc state :head head)
           (recur (inc head))))
-      state)))
+    state)))
+
 
 (defn goto-back-square
   [state io]
@@ -121,7 +136,7 @@
   [initial-state io]
   (loop [state initial-state]
     (if (>= (:head state) (count (:code state)))
-      nil
+      state
       (let [funk (get funk-map (check-instruction state))
             new-state (funk state io)
             new-head (:head new-state)]
