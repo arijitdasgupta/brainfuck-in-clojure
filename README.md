@@ -45,9 +45,8 @@ or
 bash bf_run.sh
 ```
 
-This first line of `sample_code_n_input.txt` is code. From second lines these are 
+This first line of `sample_code_n_input.txt` is code. From second lines these are stdin stream 
 
 ## What's next?
 
 Syntax pre-run checking in Brainfuck. More idiomatic clojure code.
-
