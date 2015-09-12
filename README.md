@@ -50,3 +50,7 @@ This first line of `sample_code_n_input.txt` is code. From second lines these ar
 ## What's next?
 
 Syntax pre-run checking in Brainfuck. More idiomatic clojure code.
+
+##KNOWN ISSUES
+
+ - `[` and `]` aren't working properly
