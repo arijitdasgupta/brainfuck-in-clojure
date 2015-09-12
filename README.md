@@ -1,5 +1,4 @@
 # Brainfuck in Clojure
-____________________________________________
 
 To teach myself Clojure, I have started writing little command line toys in Clojure. This is the first one.
 
